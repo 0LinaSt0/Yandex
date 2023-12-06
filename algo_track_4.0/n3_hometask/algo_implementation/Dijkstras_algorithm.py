@@ -21,7 +21,6 @@ class Dijkstras:
         if len(refers_dists):
             for elem in refers_dists:
                 n_vertex = elem.n_vertex
-                # print(f'num_v: {n_vertex} -> {track_vertices[n_vertex].dist()}')
                 if ((track_vertices[n_vertex].is_visited is False) & \
                     (track_vertices[n_vertex].dist() != float('inf'))
                 ):
@@ -37,14 +36,12 @@ class Dijkstras:
         track_vertices = [0] + [
             VertexInfo(idx) for idx in range(1, adj_graph.v_count + 1)
         ]
-        # print('\n'.join(map(lambda x: x.get_info(), track_vertices[1:])))
         refers_dists = []
 
         track_vertices[v_from].dist.dist = 0
 
         while v_from > 0:
             for v_neighbor, weight in adj_graph.get_item(v_from):
-                # print(v_neighbor, weight)
                 is_updated = track_vertices[v_neighbor].update_prev_vertex(
                     v_from, (track_vertices[v_from].dist() + weight)
                 )
@@ -53,14 +50,7 @@ class Dijkstras:
                     heapq.heappush(
                         refers_dists, track_vertices[v_neighbor].dist
                     )
-                # print(refers_dists)
 
             v_from = cls.__get_next_vertex(track_vertices, refers_dists)
-
-        # print(
-        #     '\n'.join((map(lambda x: x.get_info(), track_vertices[1:]))),
-        #     track_vertices[v_to].dist(),
-        #     sep='\n\n'
-        # )
 
         return cls.__dist_definer(track_vertices[v_to].dist())
